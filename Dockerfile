@@ -33,10 +33,10 @@ COPY ./bedrock/ /var/www/rocketstack
 RUN chmod a+rwx -R /var/www/
 
 # Letsencrypt ssl
-RUN add-apt-repository -y universe
-RUN add-apt-repository -y ppa:certbot/certbot
-RUN apt install -y python-certbot-nginx
-RUN certbot --nginx --non-interactive --agree-tos -m reflipd@gmail.com -d app.explode.live
+RUN snap install core; snap refresh core
+RUN snap install --classic certbot
+RUN ln -s /snap/bin/certbot /usr/bin/certbot
+RUN certbot --nginx -d app.explode.live
 # create crontab for certbot
 RUN crontab -l | { cat; echo "0 0 1 * * certbot renew"; } | crontab -
 
