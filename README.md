@@ -1,5 +1,5 @@
-# Wordflow
-An attempt for a modern WordPress with enough development-production parity
+# Wordflow Forkd 
+An attempt for a modern WordPress with enough development-production parity using Bedrock by https://roots.io.
 
 Based on
 - Docker
@@ -11,12 +11,57 @@ Based on
 - Docker and docker-compose
 - PHP composer
 - PHP extensions in the host (some more could show up)
-    - xml `sudo apt install php7.x-xml`
-    - zip `sudo apt install php7.x-zip`
+    - xml `sudo apt install php8.x-xml`
+    - zip `sudo apt install php8.x-zip`
+
+## Improvements
+- PHP memory limit set to 1024mb
+- PHP updated to 8.1
+- PHP file upload limit increased to 100mb
+- Designated for Ubuntu 22.04 Server
+- Disabled Cloudflare in nginx/sites-available/rocketstack.conf
+- Redis max-memory set to 200mb for a 2gb Ram server
 
 ## Installation
 
 Now let's explain how to get you started with the stack. It could be as quick as 10-15 minutes if you have a fast network and everything goes without error.
+
+### Fresh install
+
+``` sudo apt update && sudo apt upgrade -y ```
+``` sudo apt install preload ```
+
+Reboot the server
+
+``` reboot -i ```
+
+Install some dependencies
+
+``` sudo apt install curl ```
+``` sudo apt install php-curl ```
+``` sudo apt install php-codesniffer ```
+
+Now create a new user and give it permissions
+
+``` adduser USERNAME ```
+``` visudo ```
+
+Add this line under root entry
+
+``` user_name ALL=(ALL) ALL ```
+
+Now add the new user to the www:data group
+
+``` usermod -a -G www-data USERNAME ```
+``` chgrp www-data /var/* ```
+``` chmod g+rwxs /var/* ```
+
+Doing this creates more security and this way you don't need to use root
+
+Now switch to the user you created
+
+``` su USERNAME ```
+
 
 ### Docker
 
@@ -35,7 +80,7 @@ Install PHP [Composer](https://getcomposer.org/doc/00-intro.md)
 Clone the repository
 
 ```sh
-git clone https://github.com/ArmandoRiveroPi/wordflow
+git clone https://github.com/Redeaux-Games/wordflow
 ```
 
 Install the dependencies with Composer
