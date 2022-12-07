@@ -36,5 +36,7 @@ RUN add-apt-repository -y universe
 RUN add-apt-repository -y ppa:certbot/certbot
 RUN apt-get install -y python-certbot-nginx
 RUN certbot --nginx --non-interactive --agree-tos -m reflipd@gmail.com -d app.explode.live
+RUN crontab -e
+RUN 0 0 1 * * certbot renew
 
 CMD service nginx restart && service php8.1-fpm start && redis-server /usr/local/etc/redis/redis.conf  && tail -f /dev/null
