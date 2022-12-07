@@ -1,5 +1,5 @@
 FROM ubuntu:22.04
-RUN apt-get update
+RUN apt update
 RUN apt install -y software-properties-common
 RUN apt install -y apt-utils
 
@@ -31,11 +31,6 @@ RUN mkdir -p /var/www/cache/rocketstack
 RUN mkdir -p /var/www/rocketstack
 COPY ./bedrock/ /var/www/rocketstack
 RUN chmod a+rwx -R /var/www/
-
-# Add TuningPrimer
-RUN git clone https://github.com/BMDan/tuning-primer.sh
-RUN cd tuning-primer.sh
-RUN ./tuning-primer.sh
 
 # Letsencrypt ssl
 RUN add-apt-repository -y universe
