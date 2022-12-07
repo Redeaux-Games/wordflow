@@ -4,7 +4,7 @@ RUN apt install -y software-properties-common
 RUN apt install -y apt-utils
 # Install PHP packages
 RUN add-apt-repository ppa:ondrej/php
-RUN DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get -y install php
+RUN DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get -y install php8.1
 RUN apt-get purge apache2 -y
 RUN apt-get install nginx -y
 RUN apt-get install -y tmux curl wget php8.1-fpm php8.1-cli php8.1-curl php8.1-gd php8.1-intl
