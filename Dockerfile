@@ -2,16 +2,17 @@ FROM ubuntu:22.04
 RUN apt-get update
 RUN apt install -y software-properties-common
 RUN apt install -y apt-utils
+
 # Install PHP packages
 RUN add-apt-repository ppa:ondrej/php
 RUN DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get -y install php8.1
-RUN apt-get purge apache2 -y
-RUN apt-get install nginx -y
-RUN apt-get install -y tmux curl wget php8.1-fpm php8.1-cli php8.1-curl php8.1-gd php8.1-intl
-RUN apt-get install -y php8.1-mysql php8.1-mbstring php8.1-zip php8.1-xml unzip php8.1-soap php8.1-redis
+RUN apt purge apache2 -y
+RUN apt install nginx -y
+RUN apt install -y tmux curl wget php8.1-fpm php8.1-cli php8.1-curl php8.1-gd php8.1-intl
+RUN apt install -y php8.1-mysql php8.1-mbstring php8.1-zip php8.1-xml unzip php8.1-soap php8.1-redis
 
 # redis
-RUN apt-get install -y redis
+RUN apt install -y redis
 RUN mkdir -p /usr/local/etc/redis
 COPY ./docker_configs/redis.conf /usr/local/etc/redis/redis.conf
 
@@ -31,12 +32,17 @@ RUN mkdir -p /var/www/rocketstack
 COPY ./bedrock/ /var/www/rocketstack
 RUN chmod a+rwx -R /var/www/
 
+# Add TuningPrimer
+RUN git clone https://github.com/BMDan/tuning-primer.sh
+RUN cd tuning-primer.sh
+RUN ./tuning-primer.sh
+
 # Letsencrypt ssl
 RUN add-apt-repository -y universe
 RUN add-apt-repository -y ppa:certbot/certbot
-RUN apt-get install -y python-certbot-nginx
+RUN apt install -y python-certbot-nginx
 RUN certbot --nginx --non-interactive --agree-tos -m reflipd@gmail.com -d app.explode.live
-RUN crontab -e
-RUN 0 0 1 * * certbot renew
+# create crontab for certbot
+RUN crontab -l | { cat; echo "0 0 1 * * certbot renew"; } | crontab -
 
 CMD service nginx restart && service php8.1-fpm start && redis-server /usr/local/etc/redis/redis.conf  && tail -f /dev/null
