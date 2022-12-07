@@ -152,10 +152,6 @@ docker volume create --name=wordflow_data
 
 After you have the volume, move into the `bedrock` directory, there should also be an `bedrock/.env.example` file you can copy into `bedrock/.env`. 
 
-```sh
-cd
-```
-```sh cd /
 
 You'll see the usual WP stuff like database credentials and the security salts that you need to fill. 
 Be sure to set `DB_HOST=db` for database connection (`db` is a docker service name here). 
