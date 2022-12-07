@@ -103,6 +103,10 @@ In Debian based linux distributions it might be enough just to do
 sudo apt install docker docker-compose
 ```
 
+```sh
+sudo apt install composer
+```
+
 ### PHP dependencies
 
 Install PHP [Composer](https://getcomposer.org/doc/00-intro.md)
