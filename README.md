@@ -28,23 +28,40 @@ Now let's explain how to get you started with the stack. It could be as quick as
 
 ### Fresh install
 
-``` sudo apt update && sudo apt upgrade -y ```
-``` sudo apt install preload ```
+```sh
+sudo apt update && sudo apt upgrade -y 
+```
+
+```sh
+sudo apt install preload 
+```
 
 Reboot the server
 
-``` reboot -i ```
+```sh
+reboot -i 
+```
 
 Install some dependencies
 
-``` sudo apt install curl ```
-``` sudo apt install php-curl ```
-``` sudo apt install php-codesniffer ```
+```sh
+sudo apt install curl 
+```
+```sh
+sudo apt install php-curl 
+```
+```sh
+sudo apt install php-codesniffer 
+```
 
 Now create a new user and give it permissions
 
-``` adduser USERNAME ```
-``` visudo ```
+```sh
+adduser USERNAME 
+```
+```sh
+visudo 
+```
 
 Add this line under root entry
 
@@ -52,16 +69,29 @@ Add this line under root entry
 
 Now add the new user to the www:data group
 
-``` usermod -a -G www-data USERNAME ```
-``` chgrp www-data /var/* ```
-``` chmod g+rwxs /var/* ```
+```sh
+usermod -a -G www-data USERNAME 
+```
+```sh
+chgrp www-data /var/* 
+```
+```sh
+chmod g+rwxs /var/* 
+```
 
 Doing this creates more security and this way you don't need to use root
 
 Now switch to the user you created
 
-``` su USERNAME ```
+```sh
+su USERNAME 
+```
 
+Now to ensure your user has access to sudo
+
+```sh
+sudo mkdir test
+```
 
 ### Docker
 
@@ -77,6 +107,12 @@ sudo apt install docker docker-compose
 
 Install PHP [Composer](https://getcomposer.org/doc/00-intro.md)
 
+Go to the var directory
+
+```sh
+cd /var
+```
+
 Clone the repository
 
 ```sh
@@ -86,14 +122,27 @@ git clone https://github.com/Redeaux-Games/wordflow
 Install the dependencies with Composer
 
 ```sh
-cd bedrock && composer install
+cd wordflow 
+```
+
+```sh
+cd bedrock
+```
+
+```sh 
+composer install
 ```
 
 ### Launch the containers
 
 There are two `.env` files you'll need to create before you run your WordPress site, one for Docker and the other for Bedrock.
 
-You will see in the root directory a `.env.example` file. You should copy it into a `.env` file and edit it. When you create your MySQL Docker image, Docker will use the parameters in this `.env` file to set the root password and to create a new MySQL user that will own the database intended for WP. In my opinion, the data should go into an external Docker volume, otherwise it will be lost forever if you do `docker-compose down`. Once you create the MySQL image and put the database into the volume, you cannot change the credentials simply by editing the `.env` file, though. You'll either need to destroy the volume an rebuild the image, or change the credentials inside MySQL with an `ALTER USER` query.
+You will see in the root directory a `.env.example` file. You should copy it into a `.env` file and edit it. 
+When you create your MySQL Docker image, Docker will use the parameters in this `.env` file to set the root password and to create a new MySQL user that will own the database intended for WP. 
+
+In my opinion, the data should go into an external Docker volume, otherwise it will be lost forever if you do `docker-compose down`. 
+Once you create the MySQL image and put the database into the volume, you cannot change the credentials simply by editing the `.env` file, though. 
+You'll either need to destroy the volume an rebuild the image, or change the credentials inside MySQL with an `ALTER USER` query.
 
 I called the volume `wordflow_data` but you can name it any way you want, just remember to edit the `docker-compose.yml` accordingly. You can create the volume with
 
@@ -101,7 +150,17 @@ I called the volume `wordflow_data` but you can name it any way you want, just r
 docker volume create --name=wordflow_data
 ```
 
-After you have the volume, move into the `bedrock` directory, there should also be an `bedrock/.env.example` file you can copy into `bedrock/.env`. You'll see the usual WP stuff like database credentials and the security salts that you need to fill. Be sure to set `DB_HOST=db` for database connection (`db` is a docker service name here). Also, you'll see the parameter `WP_ENV` which is part of the Bedrock genius, because you can use it to separate production, staging and development environments. Anywhere within your code you can check for instance `if(defined('WP_ENV') && WP_ENV === 'production')` and you can take special actions per environment.
+After you have the volume, move into the `bedrock` directory, there should also be an `bedrock/.env.example` file you can copy into `bedrock/.env`. 
+
+```sh
+cd
+```
+```sh cd /
+
+You'll see the usual WP stuff like database credentials and the security salts that you need to fill. 
+Be sure to set `DB_HOST=db` for database connection (`db` is a docker service name here). 
+
+Also, you'll see the parameter `WP_ENV` which is part of the Bedrock genius, because you can use it to separate production, staging and development environments. Anywhere within your code you can check for instance `if(defined('WP_ENV') && WP_ENV === 'production')` and you can take special actions per environment.
 
 At this point you can build the Docker images running this
 
