@@ -32,12 +32,4 @@ RUN mkdir -p /var/www/rocketstack
 COPY ./bedrock/ /var/www/rocketstack
 RUN chmod a+rwx -R /var/www/
 
-# Letsencrypt ssl
-RUN snap install core; snap refresh core
-RUN snap install --classic certbot
-RUN ln -s /snap/bin/certbot /usr/bin/certbot
-RUN certbot --nginx -d app.explode.live
-# create crontab for certbot
-RUN crontab -l | { cat; echo "0 0 1 * * certbot renew"; } | crontab -
-
 CMD service nginx restart && service php8.1-fpm start && redis-server /usr/local/etc/redis/redis.conf  && tail -f /dev/null
